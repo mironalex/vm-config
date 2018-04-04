@@ -28,22 +28,22 @@ set_ssh_option() {
     fi
 }
 
+SSH_DIR="$HOME/.ssh"
+SSH_KEYSFILE="$SSH_DIR/authorized_keys"
 
 # SSH config
 set_ssh_option "PasswordAuthentication" "no"
 set_ssh_option "PermitRootLogin" "without-password"
 set_ssh_option "PubKeyAuthentication" "yes"
 set_ssh_option "RSAAuthentication" "yes"
-set_ssh_option "AuthorizedKeysFile" "/root/.ssh/authorized_keys"
+set_ssh_option "AuthorizedKeysFile" "$SSH_KEYSFILE"
 
-SSH_DIR="$HOME/.ssh"
 # Make sure .ssh dir exists
 if [ ! -d "$SSH_DIR" ]; then
 	mkdir -p "$SSH_DIR"
 	chmod 600 "$SSH_DIR"
 fi
 
-SSH_KEYSFILE="$SSH_DIR/authorized_keys"
 if [ ! -f $SSH_KEYSFILE ]; then
     touch "$SSH_KEYSFILE"
     chmod 600 "$SSH_KEYSFILE"
