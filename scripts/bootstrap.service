@@ -1,9 +1,0 @@
-[Unit]
-Description=Bootstrap serice
-
-[Service]
-Type=oneshot
-ExecStart=/media/sf_scripts/bootstrap.sh
-
-[Install]
-WantedBy=default.target
