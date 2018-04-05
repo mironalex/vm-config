@@ -23,14 +23,15 @@ def deploy(arguments):
     copyfile(src, dst)
 
     with open(config, 'w') as fout:
-        fout.write('IPV4="' + arguments.ipv4 + '"')
-        if not os.path.isfile('~/.ssh/id_rsa.pub'):
-            subprocess.run(['ssh-keygen', '-t', 'rsa', '-b', '4096', '-f', '~/.ssh/id_rsa', '-N', '""'])
+        fout.write('IPV4="' + arguments.ipv4 + '"\n')
+        ssh_privkey = os.path.join(os.path.expanduser("~"), '.ssh/id_rsa')
+        if not os.path.isfile(ssh_privkey):
+            subprocess.run(['ssh-keygen', '-t', 'rsa', '-b', '4096', '-f', ssh_privkey, '-N', '""'])
 
-        with open('~/.ssh/id_rsa.pub') as keyfile:
+        with open(ssh_privkey + '.pub') as keyfile:
             key = keyfile.read()
 
-        fout.write('SSH_KEY="' + key + '"')
+        fout.write('SSH_KEY="' + key + '"\n')
 
     subprocess.run(['vboxmanage', 'sharedfolder', 'add', arguments.hostname, '--name', 'scripts', '--hostpath', sf_path,
                     '--readonly', '--automount'])
