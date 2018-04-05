@@ -3,7 +3,13 @@
 exec > /var/log/system-bootstrap.log
 exec 2> /var/log/system-bootstrap.log
 
-source ./config
+CONFIG="config"
+if [[ $# -eq 1 ]]; then
+    CONFIG="$1"
+fi
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$DIR/$CONFIG"
 
 # Update the system
 yum update -y
