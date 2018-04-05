@@ -3,6 +3,7 @@
 import argparse
 import subprocess
 import os
+from shutil import copyfile
 
 DEFINED_ACTIONS = ['deploy', 'halt', 'start', 'destroy']
 SOURCE_VM = 'centos'
@@ -15,6 +16,22 @@ def deploy(arguments):
     sf_path = os.getcwd() + "/sf_" + arguments.hostname
     if not os.path.exists(sf_path):
         os.makedirs(sf_path)
+
+    dst = os.path.join(sf_path, 'bootstrap.sh')
+    src = os.path.join(os.getcwd(), 'bootstrap.sh')
+    config = os.path.join(sf_path, 'config')
+    copyfile(src, dst)
+
+    with open(config, 'w') as fout:
+        fout.write('IPV4="' + arguments.ipv4 + '"')
+        if not os.path.isfile('~/.ssh/id_rsa.pub'):
+            subprocess.run(['ssh-keygen', '-t', 'rsa', '-b', '4096', '-f', '~/.ssh/id_rsa', '-N', '""'])
+
+        with open('~/.ssh/id_rsa.pub') as keyfile:
+            key = keyfile.read()
+
+        fout.write('SSH_KEY="' + key + '"')
+
     subprocess.run(['vboxmanage', 'sharedfolder', 'add', arguments.hostname, '--name', 'scripts', '--hostpath', sf_path,
                     '--readonly', '--automount'])
 
