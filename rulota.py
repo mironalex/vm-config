@@ -4,6 +4,7 @@ import argparse
 import subprocess
 import os
 from shutil import copyfile
+from pathlib import Path
 
 DEFINED_ACTIONS = ['deploy', 'halt', 'start', 'destroy']
 SOURCE_VM = 'centos'
@@ -24,8 +25,10 @@ def deploy(arguments):
 
     with open(config, 'w') as fout:
         fout.write('IPV4="' + arguments.ipv4 + '"\n')
+
         ssh_privkey = os.path.join(os.path.expanduser("~"), '.ssh/id_rsa')
-        if not os.path.isfile(ssh_privkey):
+        print(ssh_privkey)
+        if not Path(ssh_privkey).is_file():
             subprocess.run(['ssh-keygen', '-t', 'rsa', '-b', '4096', '-f', ssh_privkey, '-N', '""'])
 
         with open(ssh_privkey + '.pub') as keyfile:
