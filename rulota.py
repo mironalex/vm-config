@@ -32,10 +32,12 @@ def destroy(arguments):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(usage='%(prog)s ' + '[' + '|'.join(DEFINED_ACTIONS) + ']' + ' hostname')
+    parser = argparse.ArgumentParser(usage='%(prog)s ' + '[' + '|'.join(DEFINED_ACTIONS) + ']' + ' hostname ' + 'ipv4')
     parser.add_argument('action', type=str, help='action for taget vm: ' + '|'.join(DEFINED_ACTIONS))
     parser.add_argument('hostname', type=str, help='name of the target vm')
+    parser.add_argument('ipv4', type=str, help='ip to be assigned to the vm')
     parser.add_argument('--source', type=str, help='name of the vm to be cloned, default is centos')
+
 
     args = parser.parse_args()
 
