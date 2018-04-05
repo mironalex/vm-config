@@ -104,3 +104,7 @@ ENV/
 
 #PyCharm / Idea IDEs
 .idea/
+
+#Shared Folders
+sf_*
+config

@@ -12,8 +12,10 @@ def deploy(arguments):
     subprocess.run(['vboxmanage', 'clonevm', SOURCE_VM, '--name', arguments.hostname, '--register'])
 
     os.chdir(os.path.dirname(__file__))
-    scripts_path = os.getcwd() + "/scripts"
-    subprocess.run(['vboxmanage', 'sharedfolder', 'add', arguments.hostname, '--name', 'scripts', '--hostpath', scripts_path,
+    sf_path = os.getcwd() + "/sf_" + arguments.hostname
+    if not os.path.exists(sf_path):
+        os.makedirs(sf_path)
+    subprocess.run(['vboxmanage', 'sharedfolder', 'add', arguments.hostname, '--name', 'scripts', '--hostpath', sf_path,
                     '--readonly', '--automount'])
 
 
